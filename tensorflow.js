@@ -1,5 +1,34 @@
-
+let i=1;
 window.runDetect = (model, video, canvas) => {
+
+    // detect objects in the image.
+
+        const context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        const top = video.offsetTop;
+        canvas.style.top = top;
+        context.font = '10px Arial';
+        const predictions = [{bbox:[20+i++,20,150,100],text:"test"}]
+        for (let i = 0; i < predictions.length; i++) {
+            context.beginPath();
+            context.rect(...predictions[i].bbox);
+            context.lineWidth = 2;
+            context.strokeStyle = 'green';
+            context.fillStyle = 'green';
+            context.stroke();
+            context.fillText(
+                predictions[i].text, predictions[i].bbox[0],
+                predictions[i].bbox[1] > 10 ? predictions[i].bbox[1] - 5 : 10);
+        }
+
+        window.setTimeout(() => { 
+            if (model.run) {
+                model.run(model, video, canvas); 
+             }
+        }, 1000);
+
+}
+window.runDetect1 = (model, video, canvas) => {
 
     console.time('runDetect');
     // detect objects in the image.
