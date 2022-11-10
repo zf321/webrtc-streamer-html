@@ -1,8 +1,35 @@
 <html>
+
 <head>
     <script type="module" src="webrtc-streamer-element.js"></script>
+    <script src="/libs/socket.io.esm.min.js"></script>
+
 </head>
+
 <body>
-   <webrtc-streamer url="rtsp://admin:a12345678@192.168.1.193/h265/ch33/main/av_stream"></webrtc-streamer>
+
+    <script>
+        const socket = new WebSocket("ws://192.168.1.87:10002");
+
+        socket.addEventListener("open", () => {
+            // 向服务器发送消息
+            socket.send(JSON.stringify({
+                type: "hello from server",
+                content: [3, "4"]
+            }));
+        });
+
+        // 从服务器接收消息
+        socket.addEventListener("message", ({ data }) => {
+            const packet = JSON.parse(data);
+
+            switch (packet.type) {
+                case "hello from server":
+                    // ...
+                    break;
+            }
+        });
+    </script>
 </body>
+
 </html>
